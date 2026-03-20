@@ -1,65 +1,72 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Trophy, Code2, Users, ArrowRight } from "lucide-react";
+import { auth } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gradient-to-b from-background to-muted/20 px-4 py-16">
+      <div className="max-w-4xl text-center space-y-8 fade-in-up">
+        <div className="inline-flex items-center justify-center p-4 bg-primary/10 text-primary rounded-full mb-4 shadow-sm">
+           <Trophy className="h-10 w-10" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-foreground">
+          Elevate Your <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">Engineering</span> Talent
+        </h1>
+        <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          The ultimate platform for universities to track, rank, and showcase their students' LeetCode performance through unified real-time institutional leaderboards.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+          {session?.user ? (
+            <Link 
+              href={(session.user as any).role === "ADMIN" ? "/admin" : (session.user as any).role === "COLLEGE" ? "/college" : "/leaderboard"} 
+              className="flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto"
+            >
+              Go to Dashboard <ArrowRight className="h-5 w-5" />
+            </Link>
+          ) : (
+            <Link 
+              href="/login" 
+              className="flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto"
+            >
+              Get Started <ArrowRight className="h-5 w-5" />
+            </Link>
+          )}
+          <Link 
+            href="https://github.com/shadcn/ui" 
             target="_blank"
-            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 h-14 px-8 rounded-full border border-input bg-background font-semibold hover:bg-accent hover:text-accent-foreground transition-colors text-lg shadow-sm w-full sm:w-auto"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Learn More
+          </Link>
         </div>
-      </main>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full mt-32">
+         <div className="flex flex-col items-center text-center p-8 bg-card border rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <div className="h-14 w-14 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-6 border border-blue-200 dark:border-blue-800">
+               <Trophy className="h-7 w-7 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Automated Rankings</h3>
+            <p className="text-muted-foreground leading-relaxed">Sync directly with LeetCode to build completely hands-off competitive ladders reflecting true analytical scaling.</p>
+         </div>
+         <div className="flex flex-col items-center text-center p-8 bg-card border rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <div className="h-14 w-14 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center mb-6 border border-green-200 dark:border-green-800">
+               <Users className="h-7 w-7 text-green-600 dark:text-green-400" />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Institutional Hubs</h3>
+            <p className="text-muted-foreground leading-relaxed">Colleges get isolated command centers to bulk-upload students via CSVs and manage cohorts securely.</p>
+         </div>
+         <div className="flex flex-col items-center text-center p-8 bg-card border rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <div className="h-14 w-14 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-6 border border-purple-200 dark:border-purple-800">
+               <Code2 className="h-7 w-7 text-purple-600 dark:text-purple-400" />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Detailed Analytics</h3>
+            <p className="text-muted-foreground leading-relaxed">Instantly compare contest ratings, total solved, and granular difficulty splits between any peers easily.</p>
+         </div>
+      </div>
     </div>
   );
 }
